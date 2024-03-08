@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 //get current Date
 function getCurrentFormattedDate() {
   const date = new Date();
