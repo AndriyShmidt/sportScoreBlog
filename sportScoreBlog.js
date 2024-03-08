@@ -77,12 +77,10 @@ async function fetchArticle(item) {
 }
 
 async function processItem(item, match) {
-  if (facebookAutopost) {
     if (Number(item.state_display) && Number(item.state_display) < 2) {
       const article = await fetchArticle(item);
       await postBlog(item, match, article);
     }
-  }
 }
 
 async function getMatch(matches) {
