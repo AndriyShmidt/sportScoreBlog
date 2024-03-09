@@ -1,4 +1,27 @@
 import fetch from 'node-fetch';
+import axios from 'axios';
+import axiosCookieJarSupport from 'axios-cookiejar-support';
+import { CookieJar } from 'tough-cookie';
+
+axiosCookieJarSupport(axios);
+
+const cookieJar = new CookieJar();
+
+async function getCsrfToken(url) {
+  try {
+    await axios.get(url, {
+      withCredentials: true,
+      jar: cookieJar
+    });
+
+    const cookies = cookieJar.getCookiesSync(url);
+    const csrfTokenCookie = cookies.find(cookie => cookie.key === 'csrftoken');
+    return csrfTokenCookie ? csrfTokenCookie.value : null;
+  } catch (error) {
+    console.error('Error fetching CSRF token:', error);
+    return null;
+  }
+}
 
 //get current Date
 function getCurrentFormattedDate() {
@@ -11,6 +34,7 @@ function getCurrentFormattedDate() {
 
 // post article to sportscore blog page
 async function postBlog(item, match, article) {
+  const csrfToken = await getCsrfToken('https://sportscore.io/api/v1/football/matches/?match_status=live&sort_by_time=false&page=0');
   const homeTeamName = item.home_team?.name || '';
   const awayTeamName = item.away_team?.name || '';
   const competitionName = match.competition?.name || '';
@@ -30,7 +54,8 @@ async function postBlog(item, match, article) {
     headers: {
       'accept': 'application/json',
       'Content-Type': 'application/json',
-      'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm'
+      'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
+      'X-CSRFToken': csrfToken
     },
     body: JSON.stringify(data)
   };
