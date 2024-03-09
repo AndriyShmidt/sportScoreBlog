@@ -131,7 +131,6 @@ function fetchData() {
       },
   })
   .then(response => {
-      console.log('Cookies set:', jar.getCookiesSync('https://sportscore.io').toJSON());
       csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
       console.log('CSRF Token:', csrfToken);
       getMatch(response.data.match_groups);
