@@ -18,28 +18,19 @@ function getCurrentFormattedDate() {
 }
 
 // post article to sportscore blog page
-async function postBlog() {
-  // const homeTeamName = item.home_team?.name || '';
-  // const awayTeamName = item.away_team?.name || '';
-  // const competitionName = match.competition?.name || '';
-  // const articleContent = article.data[0].content;
+async function postBlog(item, match, article) {
+  const homeTeamName = item.home_team?.name || '';
+  const awayTeamName = item.away_team?.name || '';
+  const competitionName = match.competition?.name || '';
+  const articleContent = article.data[0].content;
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
-  // const data = {
-  //   path: `${homeTeamName}-vs-${awayTeamName}`,
-  //   content: `${articleContent}`,
-  //   title: `🎌Match Started!🎌 \n\n💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
-  //   description: " ",
-  //   is_visible: true,
-  //   created_on: `${getCurrentFormattedDate()}`,
-  // };
-
-  const data = {
-    path: `test`,
-    content: `test test`,
-    title: `test`,
-    description:  "test",
+const data = {
+    path: `${homeTeamName}-vs-${awayTeamName}`,
+    content: articleContent,
+    title: `🎌Match Started!🎌 \n\n💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
+    description: " ",
     is_visible: true,
-    created_on: `2024-01-01`,
+    created_on: getCurrentFormattedDate(),
   };
 
   const options = {
@@ -48,7 +39,7 @@ async function postBlog() {
       'accept': 'application/json',
       'Content-Type': 'application/json',
       'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
-      'X-CSRFToken': 'ym2ESvf5cDrcIA8rXzqkm5HTmu0CzaSvTkIcxEdgVg3apS8Ovj9jkD0z5yI8v6s9',
+      'X-CSRFToken': csrfToken,
     },
     body: JSON.stringify(data)
   };
@@ -121,7 +112,7 @@ function fetchData() {
   .then(response => {
       csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
       console.log('CSRF Token:', csrfToken);
-      postBlog();
+      getMatch(response.data.match_groups);
   })
   .catch(error => {
       console.error('Error:', error);
