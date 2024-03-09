@@ -1,27 +1,12 @@
 import fetch from 'node-fetch';
 import axios from 'axios';
-import axiosCookieJarSupport from 'axios-cookiejar-support';
 import { CookieJar } from 'tough-cookie';
+import { wrapper } from 'axios-cookiejar-support';
 
-axiosCookieJarSupport(axios);
+const jar = new CookieJar();
+const client = wrapper(axios.create({ jar }));
+let csrfToken;
 
-const cookieJar = new CookieJar();
-
-async function getCsrfToken(url) {
-  try {
-    await axios.get(url, {
-      withCredentials: true,
-      jar: cookieJar
-    });
-
-    const cookies = cookieJar.getCookiesSync(url);
-    const csrfTokenCookie = cookies.find(cookie => cookie.key === 'csrftoken');
-    return csrfTokenCookie ? csrfTokenCookie.value : null;
-  } catch (error) {
-    console.error('Error fetching CSRF token:', error);
-    return null;
-  }
-}
 
 //get current Date
 function getCurrentFormattedDate() {
@@ -34,7 +19,6 @@ function getCurrentFormattedDate() {
 
 // post article to sportscore blog page
 async function postBlog(item, match, article) {
-  const csrfToken = await getCsrfToken('https://sportscore.io/api/v1/football/matches/?match_status=live&sort_by_time=false&page=0');
   const homeTeamName = item.home_team?.name || '';
   const awayTeamName = item.away_team?.name || '';
   const competitionName = match.competition?.name || '';
@@ -49,13 +33,15 @@ async function postBlog(item, match, article) {
     created_on: getCurrentFormattedDate(),
   };
 
+  console.log(csrfToken);
+
   const options = {
     method: 'POST',
     headers: {
       'accept': 'application/json',
       'Content-Type': 'application/json',
       'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
-      'X-CSRFToken': csrfToken
+      'X-CSRFToken': csrfToken,
     },
     body: JSON.stringify(data)
   };
@@ -127,6 +113,8 @@ function fetchData() {
   })
   .then(response => response.json())
   .then(data => {
+      csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
+      console.log('CSRF Token:', csrfToken);
       getMatch(data.match_groups);
   })
   .catch(error => {
