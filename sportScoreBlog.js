@@ -23,7 +23,7 @@ async function postBlog() {
   // const awayTeamName = item.away_team?.name || '';
   // const competitionName = match.competition?.name || '';
   // const articleContent = article.data[0].content;
-  // const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
+  const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
   // const data = {
   //   path: `${homeTeamName}-vs-${awayTeamName}`,
   //   content: `${articleContent}`,
