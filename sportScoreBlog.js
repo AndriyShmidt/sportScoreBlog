@@ -26,11 +26,11 @@ async function postBlog(item, match, article) {
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
   const data = {
     path: `${homeTeamName}-vs-${awayTeamName}`,
-    content: articleContent,
+    content: `${articleContent}`,
     title: `🎌Match Started!🎌 \n\n💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
     description: " ",
     is_visible: true,
-    created_on: getCurrentFormattedDate(),
+    created_on: `${getCurrentFormattedDate()}`,
   };
 
   const options = {
