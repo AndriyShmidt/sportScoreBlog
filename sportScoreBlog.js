@@ -48,7 +48,7 @@ async function postBlog() {
       'accept': 'application/json',
       'Content-Type': 'application/json',
       'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
-      'X-Csrftoken': csrfToken,
+      'X-CSRFToken': csrfToken,
     },
     body: JSON.stringify(data)
   };
