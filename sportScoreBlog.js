@@ -37,7 +37,7 @@ async function postBlog() {
     path: `test`,
     content: `test test`,
     title: `test`,
-    description: " ",
+    description:  "test",
     is_visible: true,
     created_on: `2024-01-01`,
   };
