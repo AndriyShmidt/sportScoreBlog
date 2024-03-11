@@ -33,15 +33,13 @@ async function postBlog(item, match, article) {
     created_on: getCurrentFormattedDate(),
   };
 
-  console.log(csrfToken);
-
   const options = {
     method: 'POST',
     headers: {
       'accept': 'application/json',
       'Content-Type': 'application/json',
       'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
-      'X-CSRFToken': csrfToken,
+      'X-Csrftoken': csrfToken,
     },
     body: JSON.stringify(data)
   };
@@ -103,25 +101,6 @@ async function getMatch(matches) {
 }
 
 // get data from Sport Score
-// function fetchData() {
-//   fetch('https://sportscore.io/api/v1/football/matches/?match_status=live&sort_by_time=false&page=0', {
-//       method: 'GET',
-//       headers: {
-//           "accept": "application/json",
-//           'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
-//       },
-//   })
-//   .then(response => response.json())
-//   .then(data => {
-//       console.log('Cookies set:', jar.getCookiesSync('https://sportscore.io'));
-//       csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
-//       console.log('CSRF Token:', csrfToken);
-//       getMatch(data.match_groups);
-//   })
-//   .catch(error => {
-//       console.error('Error:', error);
-//   });
-// }
 
 function fetchData() {
   client.get('https://sportscore.io/api/v1/football/matches/?match_status=live&sort_by_time=false&page=0', {
