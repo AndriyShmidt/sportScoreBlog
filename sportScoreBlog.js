@@ -24,13 +24,22 @@ async function postBlog(item, match, article) {
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
+  // const data = {
+  //   path: `${homeTeamName}-vs-${awayTeamName}`,
+  //   content: `${articleContent}`,
+  //   title: `🎌Match Started!🎌 \n\n💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
+  //   description: " ",
+  //   is_visible: true,
+  //   created_on: `${getCurrentFormattedDate()}`,
+  // };
+
   const data = {
-    path: `${homeTeamName}-vs-${awayTeamName}`,
-    content: `${articleContent}`,
-    title: `🎌Match Started!🎌 \n\n💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
+    path: `test`,
+    content: `test test`,
+    title: `test`,
     description: " ",
     is_visible: true,
-    created_on: `${getCurrentFormattedDate()}`,
+    created_on: `2024-01-01`,
   };
 
   const options = {
@@ -112,7 +121,7 @@ function fetchData() {
   .then(response => {
       csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
       console.log('CSRF Token:', csrfToken);
-      getMatch(response.data.match_groups);
+      postBlog(item, match, article);
   })
   .catch(error => {
       console.error('Error:', error);
