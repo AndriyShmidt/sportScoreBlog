@@ -18,12 +18,12 @@ function getCurrentFormattedDate() {
 }
 
 // post article to sportscore blog page
-async function postBlog(item, match, article) {
-  const homeTeamName = item.home_team?.name || '';
-  const awayTeamName = item.away_team?.name || '';
-  const competitionName = match.competition?.name || '';
-  const articleContent = article.data[0].content;
-  const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
+async function postBlog() {
+  // const homeTeamName = item.home_team?.name || '';
+  // const awayTeamName = item.away_team?.name || '';
+  // const competitionName = match.competition?.name || '';
+  // const articleContent = article.data[0].content;
+  // const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
   // const data = {
   //   path: `${homeTeamName}-vs-${awayTeamName}`,
   //   content: `${articleContent}`,
@@ -121,7 +121,7 @@ function fetchData() {
   .then(response => {
       csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
       console.log('CSRF Token:', csrfToken);
-      postBlog(item, match, article);
+      postBlog();
   })
   .catch(error => {
       console.error('Error:', error);
