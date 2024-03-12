@@ -7,6 +7,23 @@ const jar = new CookieJar();
 const client = wrapper(axios.create({ jar }));
 let csrfToken;
 
+//fetch csrfToken
+
+async function getCsrfToken() {
+  client.get('https://sportscore.io/api/v1/general/ping/', {
+    headers: {
+        "accept": "application/json",
+        'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
+    },
+    })
+    .then(response => {
+        csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
+        console.log('CSRF Token:', csrfToken);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
 //get current Date
 function getCurrentFormattedDate() {
@@ -24,6 +41,7 @@ async function postBlog(item, match, article) {
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
+  csrfToken = await getCsrfToken();
 const data = {
     path: `${homeTeamName}-vs-${awayTeamName}`,
     content: articleContent,
@@ -110,8 +128,8 @@ function fetchData() {
       },
   })
   .then(response => {
-      csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
-      console.log('CSRF Token:', csrfToken);
+      // csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
+      // console.log('CSRF Token:', csrfToken);
       getMatch(response.data.match_groups);
   })
   .catch(error => {
