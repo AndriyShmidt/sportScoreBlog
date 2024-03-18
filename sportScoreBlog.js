@@ -62,8 +62,11 @@ const data = {
     body: JSON.stringify(data)
   };
 
+  console.log(options);
   try {
     const response = await fetch(url, options);
+
+    console.log(response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
