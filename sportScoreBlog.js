@@ -5,22 +5,20 @@ import { wrapper } from 'axios-cookiejar-support';
 
 const jar = new CookieJar();
 const client = wrapper(axios.create({ jar }));
-let csrfToken;
 
 //fetch csrfToken
 
 async function getCsrfToken() {
-  client.get('https://sportscore.io/api/v1/general/ping/', {
+  return client.get('https://sportscore.io/api/v1/blog/?page=0', {
     headers: {
         "accept": "application/json",
         'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
     },
-    })
-    .then(response => {
-        csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
+    }).then(response => {
+        const csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
         console.log('CSRF Token:', csrfToken);
-    })
-    .catch(error => {
+        return csrfToken;
+    }).catch(error => {
         console.error('Error:', error);
     });
 }
@@ -41,8 +39,8 @@ async function postBlog(item, match, article) {
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
-  csrfToken = await getCsrfToken();
-const data = {
+  const csrfToken = await getCsrfToken();
+  const data = {
     path: `${homeTeamName}-vs-${awayTeamName}`,
     content: articleContent,
     title: `🎌Match Started!🎌 \n\n💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
@@ -54,10 +52,12 @@ const data = {
   const options = {
     method: 'POST',
     headers: {
-      'accept': 'application/json',
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
       'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
-      'X-CSRFToken': csrfToken,
+      'X-Csrftoken': `${csrfToken}`,
+      'Cookie': `csrftoken=${csrfToken}`,
+      'Origin': 'https://sportscore.io'
     },
     body: JSON.stringify(data)
   };
@@ -65,8 +65,6 @@ const data = {
   console.log(options);
   try {
     const response = await fetch(url, options);
-
-    console.log(response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -109,7 +107,10 @@ async function fetchArticle(item) {
 async function processItem(item, match) {
     if (Number(item.state_display) && Number(item.state_display) < 2) {
       const article = await fetchArticle(item);
-      await postBlog(item, match, article);
+
+      if(article.data[0].content) {
+        await postBlog(item, match, article);
+      }
     }
 }
 
@@ -131,8 +132,6 @@ function fetchData() {
       },
   })
   .then(response => {
-      // csrfToken = jar.getCookiesSync('https://sportscore.io').find(cookie => cookie.key === 'csrftoken')?.value;
-      // console.log('CSRF Token:', csrfToken);
       getMatch(response.data.match_groups);
   })
   .catch(error => {
