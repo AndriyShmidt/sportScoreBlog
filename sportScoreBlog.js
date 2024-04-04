@@ -5,6 +5,50 @@ import { wrapper } from 'axios-cookiejar-support';
 
 const jar = new CookieJar();
 const client = wrapper(axios.create({ jar }));
+let csrfToken = '';
+
+//upload image to server
+
+async function uploadImage(imageName, imagePath) {
+  const homeTeamName = imageName.home_team?.name || '';
+  const awayTeamName = imageName.away_team?.name || '';
+
+  try {
+    const imageResponse = await fetch(imagePath);
+    if (!imageResponse.ok) throw new Error('Failed to fetch the image.');
+
+    const imageBlob = await imageResponse.blob();
+
+    let formData = new FormData();
+    formData.append('title', `${homeTeamName}-${awayTeamName}`);
+    formData.append('alt_text', `${homeTeamName}-${awayTeamName}`);
+    formData.append('file', imageBlob, 'image.webp');
+
+    const response = await fetch('https://sportscore.io/api/v1/blog/bot-images/', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'X-API-Key': 'uqzmebqojezbivd2dmpakmj93j7gjm',
+        'X-Csrftoken': csrfToken,
+        'Cookie': `csrftoken=${csrfToken}`,
+        'Origin': 'https://sportscore.io'
+      },
+      body: formData
+    });
+
+    if (!response.ok) throw new Error('Failed to upload the image.');
+
+    const result = await response.json();
+    console.log('Upload successful', result);
+    return result.id;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+  }
+}
+
+//upload image to blog
+
+
 
 //fetch csrfToken
 
@@ -33,13 +77,13 @@ function getCurrentFormattedDate() {
 }
 
 // post article to sportscore blog page
-async function postBlog(item, match, article) {
+async function postBlog(item, match, article, imgID) {
   const homeTeamName = item.home_team?.name || '';
   const awayTeamName = item.away_team?.name || '';
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
-  const csrfToken = await getCsrfToken();
+  csrfToken = await getCsrfToken();
   const data = {
     path: `${homeTeamName}-vs-${awayTeamName}`,
     content: articleContent,
@@ -47,6 +91,7 @@ async function postBlog(item, match, article) {
     description: " ",
     is_visible: true,
     created_on: getCurrentFormattedDate(),
+    preview_image: imgID,
   };
 
   const options = {
@@ -109,7 +154,8 @@ async function processItem(item, match) {
       const article = await fetchArticle(item);
 
       if(article.data[0].content) {
-        await postBlog(item, match, article);
+        const image_id = await uploadImage(item, item.social_picture);
+        await postBlog(item, match, article, image_id);
       }
     }
 }
