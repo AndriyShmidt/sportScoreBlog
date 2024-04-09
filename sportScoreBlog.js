@@ -13,6 +13,13 @@ async function uploadImage(imageName, imagePath) {
   const homeTeamName = imageName.home_team?.name || '';
   const awayTeamName = imageName.away_team?.name || '';
 
+  console.log('********************************')
+
+  console.log(homeTeamName, awayTeamName);
+  console.log(awayTeamName);
+  console.log(csrfToken);
+  console.log('****************************')
+
   try {
     const imageResponse = await fetch(imagePath);
     if (!imageResponse.ok) throw new Error('Failed to fetch the image.');
@@ -142,7 +149,6 @@ async function fetchArticle(item) {
   try {
     const response = await fetch('https://api.writesonic.com/v2/business/content/ai-article-writer-v3?engine=premium&language=en', options);
     const jsonResponse = await response.json();
-    console.log('WriteSonic response: ', jsonResponse);
     return jsonResponse;
   } catch (err) {
     console.error(err);
@@ -189,3 +195,12 @@ function fetchData() {
 setInterval(fetchData, 60000);
 
 fetchData();
+
+
+
+
+││ sportScoreBlog > Error uploading image: Error: Failed to upload the image.                                                                                                                │
+│                                                                               ││ sportScoreBlog >     at uploadImage (file:///root/sportScoreBlog/sportScoreBlog.js:39:29)                                                                                                 │
+│                                                                               ││ sportScoreBlog >     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)                                                                                        │
+│                                                                               ││ sportScoreBlog >     at async processItem (file:///root/sportScoreBlog/sportScoreBlog.js:157:26)                                                                                          │
+│                                                                               ││ sportScoreBlog >     at async getMatch (file:///root/sportScoreBlog/sportScoreBlog.js:166:11) 
