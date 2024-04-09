@@ -10,6 +10,7 @@ let csrfToken = '';
 //upload image to server
 
 async function uploadImage(imageName, imagePath) {
+  csrfToken = await getCsrfToken();
   const homeTeamName = imageName.home_team?.name || '';
   const awayTeamName = imageName.away_team?.name || '';
 
@@ -90,7 +91,6 @@ async function postBlog(item, match, article, imgID) {
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
-  csrfToken = await getCsrfToken();
   const data = {
     path: `${homeTeamName}-vs-${awayTeamName}`,
     content: articleContent,
