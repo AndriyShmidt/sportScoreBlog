@@ -14,13 +14,6 @@ async function uploadImage(imageName, imagePath) {
   const homeTeamName = imageName.home_team?.name || '';
   const awayTeamName = imageName.away_team?.name || '';
 
-  console.log('********************************')
-
-  console.log(homeTeamName, awayTeamName);
-  console.log(awayTeamName);
-  console.log(csrfToken);
-  console.log('****************************')
-
   try {
     const imageResponse = await fetch(imagePath);
     if (!imageResponse.ok) throw new Error('Failed to fetch the image.');
@@ -100,6 +93,8 @@ async function postBlog(item, match, article, imgID) {
     created_on: getCurrentFormattedDate(),
     preview_image: imgID,
   };
+
+  console.log(data)
 
   const options = {
     method: 'POST',
