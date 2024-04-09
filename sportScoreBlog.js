@@ -195,12 +195,3 @@ function fetchData() {
 setInterval(fetchData, 60000);
 
 fetchData();
-
-
-
-
-││ sportScoreBlog > Error uploading image: Error: Failed to upload the image.                                                                                                                │
-│                                                                               ││ sportScoreBlog >     at uploadImage (file:///root/sportScoreBlog/sportScoreBlog.js:39:29)                                                                                                 │
-│                                                                               ││ sportScoreBlog >     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)                                                                                        │
-│                                                                               ││ sportScoreBlog >     at async processItem (file:///root/sportScoreBlog/sportScoreBlog.js:157:26)                                                                                          │
-│                                                                               ││ sportScoreBlog >     at async getMatch (file:///root/sportScoreBlog/sportScoreBlog.js:166:11) 
