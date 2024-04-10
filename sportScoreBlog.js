@@ -79,7 +79,7 @@ async function postBlog(item, match, article, imgID) {
   const awayTeamName = item.away_team?.name || '';
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
-  const cleanedText = articleContent.replace(/\r?\n|<br\s*\/?>|<br\s*\/?>##|\#|<br\s*\/?>/gi, '');
+  const cleanedText = articleContent.replace(/\r?\n|<br\s*\/?>|<br\s*\/?>##|\#|<\/?br\s*\/?>/gi, '');
 
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
   const data = {
