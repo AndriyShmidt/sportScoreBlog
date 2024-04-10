@@ -83,7 +83,7 @@ async function postBlog(item, match, article, imgID) {
 
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
   const data = {
-    path: `${homeTeamName.toLowerCase()}-vs-${awayTeamName.toLowerCase()}`,
+    path: `${homeTeamName.toLowerCase().replace(/ /g, '-')}-vs-${awayTeamName.toLowerCase().replace(/ /g, '-')}`,
     content: cleanedText,
     title: `🎌Match Started!🎌 💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
     description: "description",
