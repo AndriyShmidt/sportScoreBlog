@@ -47,10 +47,6 @@ async function uploadImage(imageName, imagePath) {
   }
 }
 
-//upload image to blog
-
-
-
 //fetch csrfToken
 
 async function getCsrfToken() {
@@ -83,16 +79,14 @@ async function postBlog(item, match, article, imgID) {
   const awayTeamName = item.away_team?.name || '';
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
-  const cleanedText = articleContent.replace(/\r?\n|<br\s*\/?>/gi, '');
-
-  console.log(cleanedText);
+  const cleanedText = articleContent.replace(/\r?\n|<br\s*\/?>|<br\s*\/?>##|\#|<br\s*\/?>/gi, '');
 
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
   const data = {
-    path: `${homeTeamName} - vs - ${awayTeamName}`,
+    path: `${homeTeamName.toLowerCase()}-vs-${awayTeamName.toLowerCase()}`,
     content: cleanedText,
     title: `🎌Match Started!🎌 💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
-    description: " ",
+    description: "description",
     is_visible: true,
     created_on: getCurrentFormattedDate(),
     preview_image: imgID,
