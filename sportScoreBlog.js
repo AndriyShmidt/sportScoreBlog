@@ -152,7 +152,7 @@ async function processItem(item, match) {
     if (Number(item.state_display) && Number(item.state_display) < 2) {
       const article = await fetchArticle(item);
 
-      if(article.data[0].content) {
+      if(article.data[0].content && article.data[0].content.length > 500) {
         const image_id = await uploadImage(item, item.social_picture);
         await postBlog(item, match, article, image_id);
       }
