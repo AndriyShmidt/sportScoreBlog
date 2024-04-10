@@ -83,8 +83,10 @@ async function postBlog(item, match, article, imgID) {
   const awayTeamName = item.away_team?.name || '';
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
+  console.log(articleContent);
   const cleanedText = articleContent.replace(/\\n|br\/>/g, '');
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
+  console.log(cleanedText);
   const data = {
     path: `${homeTeamName} - vs - ${awayTeamName}`,
     content: cleanedText,
@@ -108,7 +110,6 @@ async function postBlog(item, match, article, imgID) {
     body: JSON.stringify(data)
   };
 
-  console.log(options);
   try {
     const response = await fetch(url, options);
     if (!response.ok) {
