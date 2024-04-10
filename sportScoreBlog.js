@@ -83,7 +83,10 @@ async function postBlog(item, match, article, imgID) {
   const awayTeamName = item.away_team?.name || '';
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
-  const cleanedText = articleContent.replace(/\\n|br\/>/g, '');
+  const cleanedText = articleContent.replace(/\r?\n|<br\s*\/?>/gi, '');
+
+  console.log(cleanedText);
+
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
   const data = {
     path: `${homeTeamName} - vs - ${awayTeamName}`,
@@ -108,15 +111,15 @@ async function postBlog(item, match, article, imgID) {
     body: JSON.stringify(data)
   };
 
-  console.log(options)
+  console.log(options);
 
   try {
     const response = await fetch(url, options);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
     const jsonResponse = await response.json();
-    console.log('Blog response: ',jsonResponse);
+    console.log('Blog response: ', jsonResponse);
   } catch (error) {
     console.error('Error posting blog:', error);
   }
