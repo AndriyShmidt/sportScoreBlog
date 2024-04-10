@@ -95,8 +95,6 @@ async function postBlog(item, match, article, imgID) {
     preview_image: imgID,
   };
 
-  console.log(data)
-
   const options = {
     method: 'POST',
     headers: {
