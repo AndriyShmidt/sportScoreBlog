@@ -86,7 +86,7 @@ async function postBlog(item, match, article, imgID) {
   const data = {
     path: `${homeTeamName.toLowerCase().replace(/ /g, '-')}-vs-${awayTeamName.toLowerCase().replace(/ /g, '-')}`,
     content: `${result}`,
-    title: `🎌Match Started!🎌 💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
+    title: `🎌Match Started!🎌 💥⚽️💥 <br/> ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
     description: "description",
     is_visible: true,
     created_on: getCurrentFormattedDate(),
