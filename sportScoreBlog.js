@@ -79,13 +79,13 @@ async function postBlog(item, match, article, imgID) {
   const awayTeamName = item.away_team?.name || '';
   const competitionName = match.competition?.name || '';
   const articleContent = article.data[0].content;
-  // const cleanedText = articleContent.replace(/\r?\n|<br\s*\/?>|<br\s*\/?>##|\#|<\/?br\s*\/?>/gi, '');
-  // const newText = cleanedText.replace(/br\/>/g, '');
+  let result = articleContent.replace(/br\/>/g, '<br/>');
+  result = result.replace(/#+/g, match => '<br/>'.repeat(match.length));
 
   const url = 'https://sportscore.io/api/v1/blog/bot-posts/';
   const data = {
     path: `${homeTeamName.toLowerCase().replace(/ /g, '-')}-vs-${awayTeamName.toLowerCase().replace(/ /g, '-')}`,
-    content: `${articleContent}`,
+    content: `${result}`,
     title: `🎌Match Started!🎌 💥⚽️💥 ${homeTeamName} vs ${awayTeamName} League: ${competitionName} 💥⚽️💥`,
     description: "description",
     is_visible: true,
