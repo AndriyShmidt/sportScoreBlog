@@ -90,7 +90,7 @@ async function postBlog(item, match, article, imgID) {
     description: "description",
     is_visible: true,
     created_on: getCurrentFormattedDate(),
-    preview_image: imgID,
+    preview_image_id: imgID,
   };
 
   const options = {
